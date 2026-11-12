@@ -43,13 +43,7 @@ const faqs = [
   ["¿Puedo trabajar como electricista después?", "Esta formación es introductoria y no sustituye certificaciones, licencias, supervisión técnica ni los requisitos legales aplicables en tu país."],
 ];
 function Index() {
-  const [seconds, setSeconds] = useState(14 * 60 + 57);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  useEffect(() => {
-    const timer = window.setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-  const time = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
   function buy(plan: "basic" | "pro") {
     const url = offer[plan];
     if (url) { window.location.assign(url); return; }
