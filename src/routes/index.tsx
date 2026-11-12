@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Zap, ShieldCheck, Smartphone, PlayCircle, BookOpen, Check, ChevronDown, Lightbulb, Wrench, PlugZap, ClipboardCheck, ArrowRight, LockKeyhole, Cable, CircuitBoard, GraduationCap } from "lucide-react";
+import { useRef, useState } from "react";
+import { Zap, ShieldCheck, Smartphone, PlayCircle, BookOpen, Check, ChevronDown, Lightbulb, Wrench, PlugZap, ClipboardCheck, ArrowRight, LockKeyhole, Cable, CircuitBoard, GraduationCap, X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,13 +26,15 @@ const lessons = [
   { title: "Protección y seguridad", desc: "Prevención de riesgos, protecciones y buenas prácticas.", icon: ShieldCheck },
   { title: "Revisión de instalaciones", desc: "Conceptos para identificar problemas comunes.", icon: ClipboardCheck },
 ];
-const manuals = [
-  ["Guía de Electricidad Básica", "Conceptos fundamentales", "01", Zap],
-  ["Circuitos e Instalaciones", "Diagramas ilustrados", "02", Cable],
-  ["Herramientas y Medición", "Instrumentos esenciales", "03", Wrench],
-  ["Seguridad Eléctrica", "Protección y prevención", "04", ShieldCheck],
-  ["Guías y Checklists", "Material de consulta", "05", ClipboardCheck],
-] as const;
+const manuales = [
+  { title: "Fundamentos de Electricidad", desc: "Conceptos esenciales para comenzar.", src: "/apostilas/electricidad-1.svg" },
+  { title: "Circuitos Eléctricos", desc: "Cómo se organiza un circuito residencial.", src: "/apostilas/electricidad-2.svg" },
+  { title: "Tomacorrientes y Enchufes", desc: "Componentes y conceptos básicos.", src: "/apostilas/electricidad-3.svg" },
+  { title: "Interruptores y Luminarias", desc: "Comprende el control de iluminación.", src: "/apostilas/electricidad-4.svg" },
+  { title: "Tablero de Distribución", desc: "Protecciones y organización.", src: "/apostilas/electricidad-5.svg" },
+  { title: "Uso del Multímetro", desc: "Medición y lectura básica.", src: "/apostilas/electricidad-6.svg" },
+  { title: "Seguridad Eléctrica", desc: "Prevención de accidentes en el hogar.", src: "/apostilas/electricidad-7.svg" },
+];
 const faqs = [
   ["¿Necesito tener experiencia para comenzar?", "No. La formación está pensada para personas que desean aprender los fundamentos desde cero, a su propio ritmo."],
   ["¿Cómo recibo el acceso?", "Las instrucciones de acceso se entregan por el canal informado en el checkout después de la confirmación del pago. Confirma los detalles antes de comprar."],
@@ -44,6 +46,9 @@ const faqs = [
 ];
 function Index() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const moveCarousel = (direction: number) => carouselRef.current?.scrollBy({ left: direction * (carouselRef.current.clientWidth * 0.82), behavior: "smooth" });
   function buy(plan: "basic" | "pro") {
     const url = offer[plan];
     if (url) { window.location.assign(url); return; }
@@ -93,11 +98,40 @@ function Index() {
         <div className="mx-auto max-w-2xl text-center"><span className="text-xs font-black uppercase tracking-[.2em] text-[#be8600]">Tu formación completa</span><h2 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Todo lo que necesitas para comenzar a entender la electricidad residencial</h2><p className="mt-4 text-slate-600">Un recorrido organizado por los principales conocimientos que necesitas para dar tus primeros pasos.</p></div>
         <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{lessons.map(({title,desc,icon:Icon})=><article key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><span className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#fff4c8] text-[#9b7300]"><Icon size={25}/></span><h3 className="text-lg font-extrabold">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{desc}</p></article>)}</div>
       </section>
-      <section className="bg-white py-16 sm:py-24"><div className="mx-auto max-w-6xl px-5">
-        <div className="mx-auto max-w-2xl text-center"><span className="text-xs font-black uppercase tracking-[.2em] text-[#be8600]">Material de apoyo</span><h2 className="mt-3 text-3xl font-black sm:text-4xl">Guías, diagramas y materiales de consulta</h2><p className="mt-4 text-slate-600">Así se puede organizar el material complementario del Plan Profesional. Las piezas definitivas se publicarán cuando se confirme su contenido.</p></div>
-        <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-5">{manuals.map(([title,subtitle,no,Icon])=><div key={no} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"><div className="relative flex aspect-[3/4] flex-col justify-between bg-[#173657] p-3 text-white sm:p-4"><div className="flex items-center justify-between text-[9px] font-extrabold tracking-widest text-[#fbd04d]">GUÍA VISUAL <span>{no}</span></div><div className="flex justify-center"><Icon size={48} strokeWidth={1.4} className="text-[#ffd04c]"/></div><div><p className="text-[12px] font-black leading-tight sm:text-sm">{title.toUpperCase()}</p><div className="mt-2 h-1 w-12 rounded-full bg-[#fbc531]"/></div></div><div className="p-3"><div className="text-xs font-bold">{title}</div><div className="mt-1 text-[11px] text-slate-500">{subtitle}</div></div></div>)}</div>
-        <p className="mt-5 text-center text-xs text-slate-500">Imágenes ilustrativas de presentación, no fotografías de materiales definitivos.</p>
-      </div></section>
+      <section className="bg-white py-16 sm:py-24" aria-labelledby="materiales-title">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs font-black uppercase tracking-[.2em] text-[#be8600]">Material de apoyo</span>
+            <h2 id="materiales-title" className="mt-3 text-3xl font-black sm:text-4xl">Guías, diagramas y materiales de consulta</h2>
+            <p className="mt-4 text-slate-600">Explora 7 ejemplos ilustrados de electricidad residencial, con conceptos esenciales, esquemas y consejos de seguridad.</p>
+          </div>
+          <div className="relative mt-9">
+            <div ref={carouselRef} aria-label="Galería de siete guías ilustradas" className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-5 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {manuales.map((m, i) => (
+                <article key={m.src} className="w-[82%] shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm sm:w-[45%] lg:w-[31%]">
+                  <button type="button" onClick={() => setPreviewIndex(i)} aria-label={`Ampliar ${m.title}`} className="group relative block w-full cursor-zoom-in bg-slate-50">
+                    <img src={m.src} alt={`Guía ilustrada de ${m.title}`} loading="lazy" decoding="async" width="800" height="1120" className="aspect-[5/7] w-full object-contain transition-transform duration-300 group-hover:scale-[1.025]" />
+                    <span className="absolute bottom-3 right-3 rounded-full bg-[#173657] p-2 text-white shadow-lg"><ZoomIn size={19}/></span>
+                  </button>
+                  <div className="p-4"><p className="text-[11px] font-black tracking-widest text-[#b68400]">GUÍA {String(i+1).padStart(2,"0")} / 07</p><h3 className="mt-1 text-base font-extrabold">{m.title}</h3><p className="mt-1 text-sm text-slate-600">{m.desc}</p></div>
+                </article>
+              ))}
+            </div>
+            <button aria-label="Ver guías anteriores" onClick={() => moveCarousel(-1)} className="absolute -left-3 top-[40%] z-10 hidden h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white shadow-md hover:bg-slate-50 sm:flex"><ChevronLeft size={22}/></button>
+            <button aria-label="Ver más guías" onClick={() => moveCarousel(1)} className="absolute -right-3 top-[40%] z-10 hidden h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white shadow-md hover:bg-slate-50 sm:flex"><ChevronRight size={22}/></button>
+          </div>
+          <p className="mt-3 text-center text-xs text-slate-500">Desliza para ver las 7 guías · Toca una imagen para ampliarla.</p>
+          <p className="mt-2 text-center text-xs text-slate-500">Páginas ilustrativas de muestra. El contenido final disponible se especificará en el plan adquirido.</p>
+        </div>
+      </section>
+      {previewIndex !== null && (
+        <div role="dialog" aria-modal="true" aria-label={`Vista ampliada de ${manuales[previewIndex].title}`} className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 sm:p-8" onClick={() => setPreviewIndex(null)}>
+          <button aria-label="Cerrar vista ampliada" onClick={() => setPreviewIndex(null)} className="absolute right-4 top-4 z-20 rounded-full bg-white p-3 text-[#142b48]"><X size={22}/></button>
+          <button aria-label="Guía anterior" onClick={e => {e.stopPropagation();setPreviewIndex((previewIndex+manuales.length-1)%manuales.length);}} className="absolute left-2 z-20 rounded-full bg-white/90 p-2 text-[#142b48] sm:left-6"><ChevronLeft size={25}/></button>
+          <img src={manuales[previewIndex].src} alt={`Guía ampliada de ${manuales[previewIndex].title}`} onClick={e => e.stopPropagation()} width="800" height="1120" className="max-h-[92vh] max-w-[88vw] object-contain" />
+          <button aria-label="Próxima guía" onClick={e => {e.stopPropagation();setPreviewIndex((previewIndex+1)%manuales.length);}} className="absolute right-2 z-20 rounded-full bg-white/90 p-2 text-[#142b48] sm:right-6"><ChevronRight size={25}/></button>
+        </div>
+      )}
       <section className="bg-[#122942] py-16 text-white sm:py-20"><div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-2"><div><span className="text-xs font-black tracking-[.2em] text-[#ffd04c]">APRENDIZAJE PRÁCTICO</span><h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">Aprende una habilidad útil en cualquier ciudad</h2><p className="mt-5 leading-7 text-slate-300">Comprende cómo funcionan los circuitos eléctricos de una vivienda, cómo se representan en diagramas y cuáles son los cuidados esenciales antes de intervenir una instalación.</p><div className="mt-7">{cta("CONOCER LOS PLANES")}</div></div><div className="rounded-2xl border border-white/15 bg-white/5 p-6"><div className="grid grid-cols-2 gap-3">{[{icon:PlayCircle,text:"Clases y explicaciones"},{icon:BookOpen,text:"Fundamentos claros"},{icon:ShieldCheck,text:"Enfoque en seguridad"},{icon:Smartphone,text:"Aprende donde estés"}].map(({icon:Icon,text})=><div key={text} className="rounded-xl bg-white/10 p-5"><Icon className="mb-3 text-[#ffd04c]" size={29}/><span className="block text-sm font-semibold">{text}</span></div>)}</div></div></div></section>
       <section id="planes" className="bg-[#f8fafc] px-5 py-16 sm:py-24"><div className="mx-auto max-w-5xl"><div className="text-center"><span className="text-xs font-black uppercase tracking-[.2em] text-[#be8600]">Planes</span><h2 className="mt-3 text-3xl font-black sm:text-4xl">Elige cómo quieres comenzar</h2><p className="mt-3 text-slate-600">Selecciona la opción que mejor se adapte a tu aprendizaje.</p></div>
       <div className="mx-auto mt-10 grid max-w-4xl gap-5 md:grid-cols-2 md:items-stretch">
