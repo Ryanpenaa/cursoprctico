@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Zap, ShieldCheck, Smartphone, PlayCircle, BookOpen, Check, ChevronDown, Clock3, Award, FileText, Lightbulb, Wrench, PlugZap, ClipboardCheck, ArrowRight, LockKeyhole, Cable, CircuitBoard, GraduationCap, MessageCircle, Star } from "lucide-react";
+import { useState } from "react";
+import { Zap, ShieldCheck, Smartphone, PlayCircle, BookOpen, Check, ChevronDown, Lightbulb, Wrench, PlugZap, ClipboardCheck, ArrowRight, LockKeyhole, Cable, CircuitBoard, GraduationCap } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,7 +64,7 @@ function Index() {
   return (
     <main className="min-h-screen bg-[#f8fafc] text-[#17253b] selection:bg-yellow-200">
       <div className="bg-[#f5bd20] px-3 py-2.5 text-center text-[11px] font-black tracking-[0.11em] text-[#16243a] sm:text-xs">
-        FORMACIÓN ONLINE EN ESPAÑOL <span className="mx-1 opacity-50">•</span> CONOCE LOS PLANES <span className="mx-1 opacity-50">•</span> {time}
+        FORMACIÓN ONLINE EN ESPAÑOL <span className="mx-1 opacity-50">•</span> APRENDE A TU RITMO
       </div>
       <header className="bg-white/95 border-b border-slate-100">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
@@ -77,7 +77,7 @@ function Index() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-9 px-5 pb-16 pt-12 md:grid-cols-2 md:gap-12 md:py-20">
           <div className="text-center md:text-left">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-yellow-200 bg-[#fff8df] px-4 py-2 text-[11px] font-extrabold uppercase tracking-wider text-amber-800"><Zap size={14}/> Formación práctica 100% online</div>
-            <h1 className="text-[35px] font-black leading-[1.09] tracking-[-.045em] text-[#132742] sm:text-[48px] lg:text-[57px]">Conviértete en un experto en <span className="text-[#dd9b00]">Electricidad Residencial</span> desde cero</h1>
+            <h1 className="text-[35px] font-black leading-[1.09] tracking-[-.045em] text-[#132742] sm:text-[48px] lg:text-[57px]">Aprende <span className="text-[#dd9b00]">Electricidad Residencial</span> desde cero</h1>
             <p className="mx-auto mt-6 max-w-lg text-[16px] leading-relaxed text-slate-600 md:mx-0 md:text-lg">Aprende los fundamentos, circuitos, herramientas e instalaciones residenciales con una formación clara, organizada y paso a paso.</p>
             <div className="mt-8">{cta()}</div>
             <p className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-semibold text-slate-500 md:justify-start"><span className="inline-flex items-center gap-1"><Smartphone size={14}/> Aprende a tu ritmo</span><span className="inline-flex items-center gap-1"><LockKeyhole size={14}/> Pago seguro mediante checkout</span></p>
